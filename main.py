@@ -270,6 +270,41 @@ def load_history():
     except Exception as e:
         return empty_data
 
+def update_history_record_ui(row_index_str, topic, new_fb_post):
+    if not row_index_str:
+        return "Vui lòng chọn một bài viết từ bảng phía trên!", ""
+    if not new_fb_post.strip():
+        return "Nội dung bài viết không được để trống!", ""
+        
+    try:
+        row_idx = int(row_index_str)
+        gsheet_row = row_idx + 2 # Vì dòng 1 là header, data bắt đầu từ dòng 2
+        
+        # 1. Sinh lệnh ảnh mới
+        new_prompt = asyncio.run(generate_leonardo_prompt_only(topic, new_fb_post))
+        
+        # 2. Cập nhật Gsheet
+        sheet, msg = init_gsheet()
+        if sheet is None:
+            return msg, ""
+            
+        # Update cột D (Nội dung) và E (Lệnh ảnh)
+        sheet.update(f'D{gsheet_row}:E{gsheet_row}', [[new_fb_post, new_prompt]])
+        return "✅ Cập nhật thành công! Hãy bấm 'Tải lại dữ liệu' để xem bảng mới.", new_prompt
+    except Exception as e:
+        return f"❌ Lỗi khi cập nhật: {str(e)}", ""
+
+def on_history_select(evt: gr.SelectData, df_data):
+    row_idx = evt.index[0]
+    # Tương thích cả pandas DataFrame và List
+    if hasattr(df_data, "iloc"):
+        row = df_data.iloc[row_idx]
+    else:
+        row = df_data[row_idx]
+    
+    # Trả về: (row_index, topic, fb_post, image_prompt)
+    return str(row_idx), row[2], row[3], row[4]
+
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -365,6 +400,7 @@ with gr.Blocks(title="Dr. Smile - AI Content Generator") as demo:
 
         with gr.TabItem("2. Lịch Sử Đăng Bài"):
             gr.Markdown("### 📊 Lịch Sử Content từ Google Sheets")
+            gr.Markdown("*Mẹo: Bấm vào bất kỳ dòng nào trong bảng để hiển thị nội dung và sửa chữa.*")
             refresh_btn = gr.Button("🔄 Tải lại dữ liệu")
             
             history_table = gr.Dataframe(
@@ -375,8 +411,36 @@ with gr.Blocks(title="Dr. Smile - AI Content Generator") as demo:
                 wrap=True
             )
             
+            gr.Markdown("---")
+            gr.Markdown("### ✏️ Chỉnh Sửa Nội Dung Lịch Sử")
+            selected_row_state = gr.State("") # Biến ẩn lưu số thứ tự dòng
+            with gr.Row():
+                hist_topic_input = gr.Textbox(label="Chủ đề", interactive=False, scale=1)
+            with gr.Row():
+                hist_fb_post_input = gr.Textbox(label="Nội dung Facebook (Có thể Sửa trực tiếp)", lines=8, interactive=True)
+            with gr.Row():
+                hist_update_btn = gr.Button("💾 Lưu Nội Dung Mới & Sinh lại Lệnh Ảnh", variant="primary")
+            with gr.Row():
+                hist_update_status = gr.Textbox(label="Trạng thái", interactive=False)
+                hist_img_prompt_output = gr.Textbox(label="Lệnh tạo ảnh hiện tại / Lệnh mới sinh ra", lines=5, interactive=False)
+            
+            # Gán sự kiện cho Tab 2
             refresh_btn.click(fn=load_history, inputs=[], outputs=history_table)
             demo.load(fn=load_history, inputs=[], outputs=history_table)
+            
+            # Khi click vào bảng
+            history_table.select(
+                fn=on_history_select, 
+                inputs=[history_table], 
+                outputs=[selected_row_state, hist_topic_input, hist_fb_post_input, hist_img_prompt_output]
+            )
+            
+            # Khi bấm nút Cập nhật
+            hist_update_btn.click(
+                fn=update_history_record_ui,
+                inputs=[selected_row_state, hist_topic_input, hist_fb_post_input],
+                outputs=[hist_update_status, hist_img_prompt_output]
+            )
 
 if __name__ == "__main__":
     print("[*] Đang khởi động giao diện người dùng (UI)...")
