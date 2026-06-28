@@ -133,9 +133,13 @@ YÊU CẦU ĐẶC BIỆT MỚI VỀ CẤU TRÚC ẢNH (Dựa trên thiết kế 
 
 async def generate_fb_post_only(topic):
     if not api_key:
-        return "Lỗi: Bạn cần cung cấp API KEY trong file .env"
+        return "Lỗi: Bạn chưa cấu hình biến môi trường GROQ_API_KEY trên Render."
         
-    scraped_data = await crawl_facebook_posts(topic)
+    try:
+        scraped_data = await crawl_facebook_posts(topic)
+    except Exception as e:
+        return f"Lỗi cào dữ liệu (Khả năng cao do Render thiếu thư viện hệ thống của Chromium): {str(e)}"
+        
     brand_context = read_brand_context()
     
     # 1. Tạo bài post Facebook
