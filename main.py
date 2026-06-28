@@ -295,15 +295,21 @@ def update_history_record_ui(row_index_str, topic, new_fb_post):
         return f"❌ Lỗi khi cập nhật: {str(e)}", ""
 
 def on_history_select(evt: gr.SelectData, df_data):
-    row_idx = evt.index[0]
-    # Tương thích cả pandas DataFrame và List
-    if hasattr(df_data, "iloc"):
-        row = df_data.iloc[row_idx]
-    else:
-        row = df_data[row_idx]
-    
-    # Trả về: (row_index, topic, fb_post, image_prompt)
-    return str(row_idx), row[2], row[3], row[4]
+    try:
+        row_idx = evt.index[0]
+        # Tương thích cả pandas DataFrame, Dict (mặc định của Gradio không có pandas), và List
+        if hasattr(df_data, "iloc"):
+            row = df_data.iloc[row_idx]
+        elif isinstance(df_data, dict) and "data" in df_data:
+            row = df_data["data"][row_idx]
+        else:
+            row = df_data[row_idx]
+        
+        # Trả về: (row_index, topic, fb_post, image_prompt)
+        return str(row_idx), str(row[2]), str(row[3]), str(row[4])
+    except Exception as e:
+        print(f"Lỗi khi bấm vào bảng lịch sử: {e}")
+        return "", "Lỗi đọc dữ liệu, vui lòng xem Terminal", "", ""
 
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
