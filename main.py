@@ -353,12 +353,19 @@ def process_pending_jobs():
                     sheet.update_cell(i, 6, "Đang tạo...")
                     
                     topic = row[2]
-                    fb_post = asyncio.run(generate_fb_post_only(topic))
-                    image_prompt = asyncio.run(generate_leonardo_prompt_only(topic, fb_post))
-                    
-                    # Cập nhật nhiều ô cùng lúc tránh limit API
-                    sheet.update(f'D{i}:F{i}', [[fb_post, image_prompt, "Đã hoàn thành"]])
-                    print(f"[*] Hoàn thành tạo content: {topic}")
+                    try:
+                        fb_post = asyncio.run(generate_fb_post_only(topic))
+                        image_prompt = asyncio.run(generate_leonardo_prompt_only(topic, fb_post))
+                        
+                        # Cập nhật nhiều ô cùng lúc tránh limit API
+                        sheet.update(f'D{i}:F{i}', [[fb_post, image_prompt, "Đã hoàn thành"]])
+                        print(f"[*] Hoàn thành tạo content: {topic}")
+                    except Exception as task_error:
+                        error_msg = str(task_error)
+                        print(f"[!] Lỗi tạo content cho {topic}: {error_msg}")
+                        # Ghi đè trạng thái thành Lỗi trên Sheet để user biết
+                        sheet.update_cell(i, 6, f"Lỗi: {error_msg[:100]}")
+                        
                     time.sleep(2)
     except Exception as e:
         print(f"Lỗi background job: {e}")
