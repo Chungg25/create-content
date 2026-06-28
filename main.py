@@ -290,9 +290,26 @@ def update_history_record_ui(row_index_str, topic, new_fb_post):
             
         # Update cột D (Nội dung) và E (Lệnh ảnh)
         sheet.update(f'D{gsheet_row}:E{gsheet_row}', [[new_fb_post, new_prompt]])
-        return "✅ Cập nhật thành công! Hãy bấm 'Tải lại dữ liệu' để xem bảng mới.", new_prompt
+        return "✅ Đã lưu và AI đã tạo lệnh ảnh mới! Hãy bấm 'Tải lại dữ liệu'.", new_prompt
     except Exception as e:
         return f"❌ Lỗi khi cập nhật: {str(e)}", ""
+
+def update_history_record_manual(row_index_str, new_fb_post, new_img_prompt):
+    if not row_index_str:
+        return "Vui lòng chọn một bài viết từ bảng phía trên!"
+    
+    try:
+        row_idx = int(row_index_str)
+        gsheet_row = row_idx + 2
+        
+        sheet, msg = init_gsheet()
+        if sheet is None:
+            return msg
+            
+        sheet.update(f'D{gsheet_row}:E{gsheet_row}', [[new_fb_post, new_img_prompt]])
+        return "✅ Đã lưu chỉnh sửa của bạn thành công! Hãy bấm 'Tải lại dữ liệu'."
+    except Exception as e:
+        return f"❌ Lỗi khi lưu: {str(e)}"
 
 def on_history_select(evt: gr.SelectData, df_data):
     try:
@@ -426,10 +443,12 @@ with gr.Blocks(title="Dr. Smile - AI Content Generator") as demo:
             with gr.Row():
                 hist_fb_post_input = gr.Textbox(label="Nội dung Facebook (Có thể Sửa trực tiếp)", lines=8, interactive=True)
             with gr.Row():
-                hist_update_btn = gr.Button("💾 Lưu Nội Dung Mới & Sinh lại Lệnh Ảnh", variant="primary")
+                hist_img_prompt_input = gr.Textbox(label="Lệnh tạo ảnh (Có thể Sửa trực tiếp)", lines=5, interactive=True)
             with gr.Row():
-                hist_update_status = gr.Textbox(label="Trạng thái", interactive=False)
-                hist_img_prompt_output = gr.Textbox(label="Lệnh tạo ảnh hiện tại / Lệnh mới sinh ra", lines=5, interactive=False)
+                hist_update_ai_btn = gr.Button("🤖 Lưu Nội Dung & Nhờ AI Sinh Lệnh Ảnh Mới", variant="primary")
+                hist_update_manual_btn = gr.Button("💾 Chỉ Lưu Thay Đổi (Thủ công)", variant="secondary")
+            with gr.Row():
+                hist_update_status = gr.Textbox(label="Trạng thái cập nhật", interactive=False)
             
             # Gán sự kiện cho Tab 2
             refresh_btn.click(fn=load_history, inputs=[], outputs=history_table)
@@ -439,14 +458,21 @@ with gr.Blocks(title="Dr. Smile - AI Content Generator") as demo:
             history_table.select(
                 fn=on_history_select, 
                 inputs=[history_table], 
-                outputs=[selected_row_state, hist_topic_input, hist_fb_post_input, hist_img_prompt_output]
+                outputs=[selected_row_state, hist_topic_input, hist_fb_post_input, hist_img_prompt_input]
             )
             
-            # Khi bấm nút Cập nhật
-            hist_update_btn.click(
+            # Khi bấm nút Cập nhật bằng AI
+            hist_update_ai_btn.click(
                 fn=update_history_record_ui,
                 inputs=[selected_row_state, hist_topic_input, hist_fb_post_input],
-                outputs=[hist_update_status, hist_img_prompt_output]
+                outputs=[hist_update_status, hist_img_prompt_input]
+            )
+            
+            # Khi bấm nút Cập nhật thủ công
+            hist_update_manual_btn.click(
+                fn=update_history_record_manual,
+                inputs=[selected_row_state, hist_fb_post_input, hist_img_prompt_input],
+                outputs=[hist_update_status]
             )
 
 if __name__ == "__main__":
