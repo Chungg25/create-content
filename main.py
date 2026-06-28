@@ -146,6 +146,8 @@ async def generate_fb_post_only(topic):
         
     try:
         scraped_data = await crawl_facebook_posts(topic)
+        if not scraped_data:
+            scraped_data = "Không thể tìm thấy bài viết nào trên Google để tham khảo."
     except Exception as e:
         return f"Lỗi cào dữ liệu (Khả năng cao do Render thiếu thư viện hệ thống của Chromium): {str(e)}"
         
