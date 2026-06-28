@@ -3,3 +3,5 @@ crawl4ai
 openai
 python-dotenv
 beautifulsoup4
+gspread
+oauth2client

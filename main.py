@@ -121,6 +121,7 @@ YÊU CẦU ĐẶC BIỆT MỚI VỀ CẤU TRÚC ẢNH (Dựa trên thiết kế 
 - BẮT BUỘC phải thiết kế một khu vực nhỏ (như infographic đơn giản, bảng hướng dẫn, các icon có viền) để mô tả tóm tắt QUY TRÌNH hoặc ƯU ĐIỂM của dịch vụ đó.
 - Đảm bảo tuân thủ TUYỆT ĐỐI các quy tắc về màu sắc (Xanh, Trắng) từ tài liệu hướng dẫn.
 - BẠN CHỈ ĐƯỢC TRẢ VỀ CÂU LỆNH PROMPT BẰNG TIẾNG ANH, không có tiêu đề, không giải thích gì thêm.
+- Bắt buộc phải có Hotline và câu "Liên hệ ngay để nhận tư vấn miễn phí"
 """
     user_prompt = f"Bài đăng Facebook:\n{fb_post}"
 
@@ -174,50 +175,128 @@ def generate_prompt_ui_action(topic, fb_post):
     return asyncio.run(generate_leonardo_prompt_only(topic, fb_post))
 
 # ==========================================
+# CHỨC NĂNG LÊN LỊCH & GOOGLE SHEETS
+# ==========================================
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
+
+def init_gsheet():
+    try:
+        scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+        # Yêu cầu người dùng phải có file credentials.json
+        if not os.path.exists("credentials.json"):
+            return None, "Lỗi: Không tìm thấy file credentials.json. Bạn cần tạo Google Service Account."
+        
+        creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+        client = gspread.authorize(creds)
+        
+        # Mặc định kết nối vào file "DrSmile_Content_Schedule"
+        sheet_name = os.getenv("GSHEET_NAME", "DrSmile_Content_Schedule")
+        try:
+            sheet = client.open(sheet_name).sheet1
+        except gspread.exceptions.SpreadsheetNotFound:
+            return None, f"Lỗi: Không tìm thấy Google Sheet có tên '{sheet_name}'. Hãy tạo và share quyền Edit cho email Service Account!"
+        return sheet, "Kết nối Google Sheets thành công!"
+    except Exception as e:
+        return None, f"Lỗi kết nối Google Sheets: {str(e)}"
+
+def save_schedule(topic, fb_post, image_prompt, schedule_date, schedule_time):
+    if not fb_post.strip() or not schedule_date.strip() or not schedule_time.strip():
+        return "Vui lòng điền đủ Nội dung bài, Ngày đăng và Giờ đăng!"
+    
+    sheet, msg = init_gsheet()
+    if sheet is None:
+        return msg
+        
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    schedule_datetime = f"{schedule_date} {schedule_time}"
+    
+    # Thứ tự cột: Thời gian tạo, Thời gian đăng, Chủ đề, Nội dung, Lệnh ảnh, Trạng thái
+    row = [now, schedule_datetime, topic, fb_post, image_prompt, "Chờ đăng"]
+    try:
+        sheet.append_row(row)
+        return f"✅ Đã lưu lịch trình thành công vào lúc {now}!"
+    except Exception as e:
+        return f"❌ Lỗi khi lưu dữ liệu: {str(e)}"
+
+def load_history():
+    sheet, msg = init_gsheet()
+    empty_data = [["", "", "", "", "", ""]]
+    if sheet is None:
+        return empty_data
+    try:
+        records = sheet.get_all_values()
+        if not records or len(records) <= 1:
+            return empty_data
+        # Trả về dữ liệu bỏ qua dòng tiêu đề
+        return records[1:]
+    except Exception as e:
+        return empty_data
+
+# ==========================================
 # GIAO DIỆN NGƯỜI DÙNG BẰNG GRADIO
 # ==========================================
 with gr.Blocks(title="Dr. Smile - AI Content Generator") as demo:
     gr.Markdown("# 🤖 Tự Động Tạo Content Viral & Hình Ảnh - DR. SMILE")
-    gr.Markdown("Công cụ tự động tìm bài hot trên Facebook, viết bài Marketing và tự động sinh Prompt tạo ảnh cho Leonardo.ai.")
+    gr.Markdown("Công cụ tự động tìm bài hot trên Facebook, viết bài Marketing, tự động sinh Prompt ảnh và Lên lịch đăng bài.")
     
-    with gr.Row():
-        topic_input = gr.Textbox(
-            label="Chủ đề Nha Khoa", 
-            placeholder="Ví dụ: trồng răng implant, niềng răng trong suốt...", 
-            scale=4
-        )
-        generate_post_btn = gr.Button("1. Tạo Bài Đăng Facebook 📝", variant="primary", scale=1)
-        
-    with gr.Row():
-        fb_output = gr.Textbox(
-            label="1. Bài đăng Facebook (Bạn có thể Đọc & Chỉnh Sửa tự do tại đây)", 
-            lines=15,
-            interactive=True
-        )
-        
-    with gr.Row():
-        generate_prompt_btn = gr.Button("2. Đã Chỉnh Sửa Xong? Bấm Để Tạo Lệnh Ảnh 🎨", variant="secondary")
+    with gr.Tabs():
+        with gr.TabItem("1. Tạo & Lên Lịch Content"):
+            with gr.Row():
+                topic_input = gr.Textbox(
+                    label="Chủ đề Nha Khoa", 
+                    placeholder="Ví dụ: trồng răng implant, niềng răng trong suốt...", 
+                    scale=4
+                )
+                generate_post_btn = gr.Button("1. Tạo Bài Đăng Facebook 📝", variant="primary", scale=1)
+                
+            with gr.Row():
+                fb_output = gr.Textbox(
+                    label="1. Bài đăng Facebook (Bạn có thể Đọc & Chỉnh Sửa tự do tại đây)", 
+                    lines=10,
+                    interactive=True
+                )
+                
+            with gr.Row():
+                generate_prompt_btn = gr.Button("2. Đã Chỉnh Sửa Xong? Bấm Để Tạo Lệnh Ảnh 🎨", variant="secondary")
 
-    with gr.Row():
-        img_prompt_output = gr.Textbox(
-            label="2. Lệnh tạo ảnh Leonardo.ai (Bạn có thể Đọc & Chỉnh Sửa tự do tại đây trước khi copy)", 
-            lines=10,
-            interactive=True
-        )
-    
-    # Bước 1: Tạo Post
-    generate_post_btn.click(
-        fn=generate_post_ui_action, 
-        inputs=topic_input, 
-        outputs=fb_output
-    )
-    
-    # Bước 2: Tạo Prompt ảnh từ Post đã tạo (hoặc user đã sửa)
-    generate_prompt_btn.click(
-        fn=generate_prompt_ui_action,
-        inputs=[topic_input, fb_output],
-        outputs=img_prompt_output
-    )
+            with gr.Row():
+                img_prompt_output = gr.Textbox(
+                    label="2. Lệnh tạo ảnh Leonardo.ai (Copy & Paste vào Leonardo)", 
+                    lines=5,
+                    interactive=True
+                )
+                
+            gr.Markdown("---")
+            gr.Markdown("### 🕒 Lên Lịch Đăng Bài (Lưu vào Google Sheets)")
+            with gr.Row():
+                schedule_date = gr.Textbox(label="Ngày đăng (VD: 15/10/2023)", placeholder="DD/MM/YYYY")
+                schedule_time = gr.Textbox(label="Giờ đăng (VD: 09:00)", placeholder="HH:MM")
+            
+            with gr.Row():
+                save_btn = gr.Button("💾 Lưu vào Google Sheets", variant="primary")
+                save_status = gr.Textbox(label="Trạng thái lưu", interactive=False)
+            
+            # Gán sự kiện
+            generate_post_btn.click(fn=generate_post_ui_action, inputs=topic_input, outputs=fb_output)
+            generate_prompt_btn.click(fn=generate_prompt_ui_action, inputs=[topic_input, fb_output], outputs=img_prompt_output)
+            save_btn.click(fn=save_schedule, inputs=[topic_input, fb_output, img_prompt_output, schedule_date, schedule_time], outputs=save_status)
+
+        with gr.TabItem("2. Lịch Sử Đăng Bài"):
+            gr.Markdown("### 📊 Lịch Sử Content từ Google Sheets")
+            refresh_btn = gr.Button("🔄 Tải lại dữ liệu")
+            
+            history_table = gr.Dataframe(
+                headers=["Thời gian tạo", "Thời gian đăng", "Chủ đề", "Nội dung", "Lệnh ảnh", "Trạng thái"],
+                datatype=["str", "str", "str", "str", "str", "str"],
+                col_count=(6, "fixed"),
+                interactive=False,
+                wrap=True
+            )
+            
+            refresh_btn.click(fn=load_history, inputs=[], outputs=history_table)
+            demo.load(fn=load_history, inputs=[], outputs=history_table)
 
 if __name__ == "__main__":
     print("[*] Đang khởi động giao diện người dùng (UI)...")
