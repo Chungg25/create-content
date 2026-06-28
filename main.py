@@ -1,8 +1,12 @@
 import os
 import sys
 
-# Yêu cầu Playwright sử dụng trình duyệt ở thư mục cục bộ (tránh lỗi cache của Render)
-os.environ["PLAYWRIGHT_BROWSERS_PATH"] = "0"
+# Nhận diện môi trường Cloud (Render) thông qua biến PORT
+is_cloud = os.environ.get("PORT") is not None
+
+# Nếu chạy trên Cloud (Render), yêu cầu Playwright dùng trình duyệt cục bộ tránh lỗi cache
+if is_cloud:
+    os.environ["PLAYWRIGHT_BROWSERS_PATH"] = "0"
 
 import asyncio
 import gradio as gr
