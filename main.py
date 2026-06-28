@@ -222,12 +222,13 @@ with gr.Blocks(title="Dr. Smile - AI Content Generator") as demo:
 if __name__ == "__main__":
     print("[*] Đang khởi động giao diện người dùng (UI)...")
     
-    # Render thường dùng cổng 10000, mặc định fallback về 7860
-    port = int(os.environ.get("PORT", 10000))
+    # Render thường dùng cổng 10000, mặc định fallback về 7860 cho local
+    port_env = os.environ.get("PORT")
+    port = int(port_env) if port_env else 7860
     
     demo.launch(
-        server_name="0.0.0.0",
+        server_name="0.0.0.0" if is_cloud else "127.0.0.1",
         server_port=port,
-        inbrowser=False, 
+        inbrowser=not is_cloud, 
         theme=gr.themes.Soft(primary_hue="blue")
     )
