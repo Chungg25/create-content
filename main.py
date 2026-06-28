@@ -297,9 +297,10 @@ def update_history_record_ui(row_index_str, topic, new_fb_post):
 def on_history_select(evt: gr.SelectData, df_data):
     try:
         row_idx = evt.index[0]
-        # Tương thích cả pandas DataFrame, Dict (mặc định của Gradio không có pandas), và List
-        if hasattr(df_data, "iloc"):
-            row = df_data.iloc[row_idx]
+        # Xử lý an toàn cho mọi kiểu dữ liệu mà Gradio trả về
+        if hasattr(df_data, "values"):
+            # Nếu là pandas DataFrame, chuyển thành list để dễ lấy index
+            row = df_data.values.tolist()[row_idx]
         elif isinstance(df_data, dict) and "data" in df_data:
             row = df_data["data"][row_idx]
         else:
@@ -308,7 +309,7 @@ def on_history_select(evt: gr.SelectData, df_data):
         # Trả về: (row_index, topic, fb_post, image_prompt)
         return str(row_idx), str(row[2]), str(row[3]), str(row[4])
     except Exception as e:
-        print(f"Lỗi khi bấm vào bảng lịch sử: {e}")
+        print(f"Lỗi khi bấm vào bảng lịch sử: {repr(e)}")
         return "", "Lỗi đọc dữ liệu, vui lòng xem Terminal", "", ""
 
 import time
