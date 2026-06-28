@@ -201,6 +201,25 @@ def init_gsheet():
     except Exception as e:
         return None, f"Lỗi kết nối Google Sheets: {str(e)}"
 
+def schedule_topic_only(topic, schedule_date, schedule_time):
+    if not topic.strip() or not schedule_date.strip() or not schedule_time.strip():
+        return "Vui lòng điền đủ Chủ đề, Ngày đăng và Giờ đăng!"
+    
+    sheet, msg = init_gsheet()
+    if sheet is None:
+        return msg
+        
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    schedule_datetime = f"{schedule_date} {schedule_time}"
+    
+    # Thứ tự cột: Thời gian tạo, Thời gian đăng, Chủ đề, Nội dung, Lệnh ảnh, Trạng thái
+    row = [now, schedule_datetime, topic, "", "", "Chờ xử lý"]
+    try:
+        sheet.append_row(row)
+        return f"✅ Đã lên lịch tự động chạy vào lúc {schedule_datetime}!"
+    except Exception as e:
+        return f"❌ Lỗi khi lưu dữ liệu: {str(e)}"
+
 def save_schedule(topic, fb_post, image_prompt, schedule_date, schedule_time):
     if not fb_post.strip() or not schedule_date.strip() or not schedule_time.strip():
         return "Vui lòng điền đủ Nội dung bài, Ngày đăng và Giờ đăng!"
@@ -212,7 +231,6 @@ def save_schedule(topic, fb_post, image_prompt, schedule_date, schedule_time):
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     schedule_datetime = f"{schedule_date} {schedule_time}"
     
-    # Thứ tự cột: Thời gian tạo, Thời gian đăng, Chủ đề, Nội dung, Lệnh ảnh, Trạng thái
     row = [now, schedule_datetime, topic, fb_post, image_prompt, "Chờ đăng"]
     try:
         sheet.append_row(row)
@@ -227,12 +245,55 @@ def load_history():
         return empty_data
     try:
         records = sheet.get_all_values()
-        if not records or len(records) <= 1:
+        if not records:
             return empty_data
-        # Trả về dữ liệu bỏ qua dòng tiêu đề
-        return records[1:]
+        # Kiểm tra xem dòng 1 có phải là header không (dựa vào chữ "Trạng thái")
+        if len(records[0]) >= 6 and records[0][5] == "Trạng thái":
+            if len(records) <= 1:
+                return empty_data
+            return records[1:]
+        return records
     except Exception as e:
         return empty_data
+
+import time
+from apscheduler.schedulers.background import BackgroundScheduler
+
+def process_pending_jobs():
+    sheet, msg = init_gsheet()
+    if sheet is None: return
+    try:
+        records = sheet.get_all_values()
+        if not records: return
+            
+        current_time = datetime.now()
+        # Duyệt từ dòng 1 (phòng trường hợp user không có header)
+        for i, row in enumerate(records, start=1):
+            if len(row) >= 6 and row[5] == "Chờ xử lý":
+                try:
+                    sched_time = datetime.strptime(row[1], "%d/%m/%Y %H:%M")
+                except ValueError:
+                    continue # Bỏ qua nếu định dạng sai
+                
+                if current_time >= sched_time:
+                    print(f"[*] Đang tự động tạo content cho chủ đề: {row[2]}")
+                    sheet.update_cell(i, 6, "Đang tạo...")
+                    
+                    topic = row[2]
+                    fb_post = asyncio.run(generate_fb_post_only(topic))
+                    image_prompt = asyncio.run(generate_leonardo_prompt_only(topic, fb_post))
+                    
+                    # Cập nhật nhiều ô cùng lúc tránh limit API
+                    sheet.update(f'D{i}:F{i}', [[fb_post, image_prompt, "Đã hoàn thành"]])
+                    print(f"[*] Hoàn thành tạo content: {topic}")
+                    time.sleep(2)
+    except Exception as e:
+        print(f"Lỗi background job: {e}")
+
+# Khởi động Bot ngầm chạy mỗi 1 phút
+scheduler = BackgroundScheduler()
+scheduler.add_job(process_pending_jobs, 'interval', minutes=1)
+scheduler.start()
 
 # ==========================================
 # GIAO DIỆN NGƯỜI DÙNG BẰNG GRADIO
@@ -269,19 +330,24 @@ with gr.Blocks(title="Dr. Smile - AI Content Generator") as demo:
                 )
                 
             gr.Markdown("---")
-            gr.Markdown("### 🕒 Lên Lịch Đăng Bài (Lưu vào Google Sheets)")
+            gr.Markdown("### 🕒 Lên Lịch Tự Động (Auto-Scheduler)")
+            gr.Markdown("*Nhập Ngày/Giờ. Bạn có thể bấm **Lưu bài đã viết** nếu đã tự tạo bài ở trên, HOẶC bấm **Chỉ lên lịch Chủ đề** để hệ thống ngầm tự động cào dữ liệu và viết bài vào đúng giờ đó.*")
             with gr.Row():
                 schedule_date = gr.Textbox(label="Ngày đăng (VD: 15/10/2023)", placeholder="DD/MM/YYYY")
                 schedule_time = gr.Textbox(label="Giờ đăng (VD: 09:00)", placeholder="HH:MM")
             
             with gr.Row():
-                save_btn = gr.Button("💾 Lưu vào Google Sheets", variant="primary")
-                save_status = gr.Textbox(label="Trạng thái lưu", interactive=False)
+                save_btn = gr.Button("💾 Lưu bài đã viết", variant="secondary")
+                auto_sched_btn = gr.Button("🤖 Chỉ lên lịch Chủ đề (Auto Gen)", variant="primary")
+                
+            with gr.Row():
+                save_status = gr.Textbox(label="Trạng thái", interactive=False)
             
             # Gán sự kiện
             generate_post_btn.click(fn=generate_post_ui_action, inputs=topic_input, outputs=fb_output)
             generate_prompt_btn.click(fn=generate_prompt_ui_action, inputs=[topic_input, fb_output], outputs=img_prompt_output)
             save_btn.click(fn=save_schedule, inputs=[topic_input, fb_output, img_prompt_output, schedule_date, schedule_time], outputs=save_status)
+            auto_sched_btn.click(fn=schedule_topic_only, inputs=[topic_input, schedule_date, schedule_time], outputs=save_status)
 
         with gr.TabItem("2. Lịch Sử Đăng Bài"):
             gr.Markdown("### 📊 Lịch Sử Content từ Google Sheets")
