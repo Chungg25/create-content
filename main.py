@@ -1,5 +1,9 @@
 import os
 import sys
+
+# Yêu cầu Playwright sử dụng trình duyệt ở thư mục cục bộ (tránh lỗi cache của Render)
+os.environ["PLAYWRIGHT_BROWSERS_PATH"] = "0"
+
 import asyncio
 import gradio as gr
 from crawl4ai import AsyncWebCrawler
