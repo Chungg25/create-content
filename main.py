@@ -181,20 +181,35 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
+HEADERS = ["Thời gian tạo", "Thời gian đăng", "Chủ đề", "Nội dung", "Lệnh ảnh", "Trạng thái"]
+
+def ensure_headers(sheet):
+    try:
+        records = sheet.get_all_values()
+        # Nếu sheet rỗng hoàn toàn, thêm dòng đầu
+        if not records:
+            sheet.append_row(HEADERS, table_range="A1")
+            return
+        
+        # Nếu dòng 1 không phải là header (dựa vào cột 1), ta chèn một dòng header lên trên cùng
+        if len(records[0]) == 0 or records[0][0] != "Thời gian tạo":
+            sheet.insert_row(HEADERS, index=1)
+    except Exception as e:
+        print(f"Lỗi kiểm tra header: {e}")
+
 def init_gsheet():
     try:
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        # Yêu cầu người dùng phải có file credentials.json
         if not os.path.exists("credentials.json"):
             return None, "Lỗi: Không tìm thấy file credentials.json. Bạn cần tạo Google Service Account."
         
         creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
         client = gspread.authorize(creds)
         
-        # Mặc định kết nối vào file "DrSmile_Content_Schedule"
         sheet_name = os.getenv("GSHEET_NAME", "DrSmile_Content_Schedule")
         try:
             sheet = client.open(sheet_name).sheet1
+            ensure_headers(sheet) # Tự động tạo hoặc chèn Header nếu thiếu
         except gspread.exceptions.SpreadsheetNotFound:
             return None, f"Lỗi: Không tìm thấy Google Sheet có tên '{sheet_name}'. Hãy tạo và share quyền Edit cho email Service Account!"
         return sheet, "Kết nối Google Sheets thành công!"
@@ -212,10 +227,9 @@ def schedule_topic_only(topic, schedule_date, schedule_time):
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     schedule_datetime = f"{schedule_date} {schedule_time}"
     
-    # Thứ tự cột: Thời gian tạo, Thời gian đăng, Chủ đề, Nội dung, Lệnh ảnh, Trạng thái
     row = [now, schedule_datetime, topic, "", "", "Chờ xử lý"]
     try:
-        sheet.append_row(row)
+        sheet.append_row(row, table_range="A1")
         return f"✅ Đã lên lịch tự động chạy vào lúc {schedule_datetime}!"
     except Exception as e:
         return f"❌ Lỗi khi lưu dữ liệu: {str(e)}"
@@ -233,7 +247,7 @@ def save_schedule(topic, fb_post, image_prompt, schedule_date, schedule_time):
     
     row = [now, schedule_datetime, topic, fb_post, image_prompt, "Chờ đăng"]
     try:
-        sheet.append_row(row)
+        sheet.append_row(row, table_range="A1")
         return f"✅ Đã lưu lịch trình thành công vào lúc {now}!"
     except Exception as e:
         return f"❌ Lỗi khi lưu dữ liệu: {str(e)}"
