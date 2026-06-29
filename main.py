@@ -83,7 +83,7 @@ Nhiệm vụ:
 - Hãy xác định ý định của chủ đề (Topic Intent): Đây là bài So sánh? Giải đáp thắc mắc? Hay Giới thiệu dịch vụ?
 - NẾU LÀ CHỦ ĐỀ SO SÁNH / NHIỀU CHỦ THỂ (ví dụ: Veneer vs Bọc sứ): Không viết theo lối liệt kê ưu/nhược điểm khô khan. Thay vào đó, BẮT BUỘC phải phân tích rõ TỪNG PHƯƠNG PHÁP sẽ PHÙ HỢP VỚI ĐỐI TƯỢNG KHÁCH HÀNG NÀO / TÌNH TRẠNG RĂNG NÀO. Tuyệt đối không bỏ sót vế nào hay thiên vị chỉ nhắc đến một dịch vụ.
 - NẾU LÀ CHỦ ĐỀ CHIA SẺ KIẾN THỨC THUẦN TÚY (ví dụ: cách đánh răng, chăm sóc răng): Phải giải quyết triệt để nỗi đau/thắc mắc của khách hàng trước bằng chuyên môn sâu, sau đó mới lồng ghép khéo léo giải pháp của DR. SMILE. (TUYỆT ĐỐI KHÔNG đề cập đến giá cả ở dạng bài này).
-- NẾU LÀ CHỦ ĐỀ VỀ DỊCH VỤ / SO SÁNH DỊCH VỤ: BẮT BUỘC phải đề cập khéo léo đến GIÁ TỔNG QUAN và MỨC GIÁ THẤP NHẤT của dịch vụ đó tại DR. SMILE để thu hút khách hàng (Ví dụ: "Chỉ từ X triệu đồng").
+- NẾU LÀ CHỦ ĐỀ VỀ DỊCH VỤ / SO SÁNH DỊCH VỤ (như Implant, bọc sứ, niềng răng...): BẠN BẮT BUỘC PHẢI DÒ TÌM TRONG TÀI LIỆU BẢNG GIÁ DR. SMILE VÀ GHI RÕ MỨC GIÁ THẤP NHẤT của dịch vụ đó vào bài (Ví dụ: "Chi phí cấy ghép Implant chỉ từ 18.000.000 VNĐ / trụ", "Bọc sứ thẩm mỹ chỉ từ 2.000.000 VNĐ"). VIỆC BÁO GIÁ THẤP NHẤT LÀ BẮT BUỘC ĐỂ THU HÚT KHÁCH HÀNG!
 
 ⚠️ YÊU CẦU BẮT BUỘC (CRITICAL RULE):
 - BẠN CHỈ ĐƯỢC PHÉP TRẢ VỀ DUY NHẤT NỘI DUNG CỦA BÀI ĐĂNG FACEBOOK. 
