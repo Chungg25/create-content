@@ -82,7 +82,8 @@ Nhiệm vụ:
 🎯 CHIẾN LƯỢC NỘI DUNG TÙY THEO CHỦ ĐỀ:
 - Hãy xác định ý định của chủ đề (Topic Intent): Đây là bài So sánh? Giải đáp thắc mắc? Hay Giới thiệu dịch vụ?
 - NẾU LÀ CHỦ ĐỀ SO SÁNH / NHIỀU CHỦ THỂ (ví dụ: Veneer vs Bọc sứ): Không viết theo lối liệt kê ưu/nhược điểm khô khan. Thay vào đó, BẮT BUỘC phải phân tích rõ TỪNG PHƯƠNG PHÁP sẽ PHÙ HỢP VỚI ĐỐI TƯỢNG KHÁCH HÀNG NÀO / TÌNH TRẠNG RĂNG NÀO. Tuyệt đối không bỏ sót vế nào hay thiên vị chỉ nhắc đến một dịch vụ.
-- NẾU LÀ CHỦ ĐỀ CHIA SẺ KIẾN THỨC: Phải giải quyết triệt để nỗi đau/thắc mắc của khách hàng trước bằng chuyên môn sâu, sau đó mới lồng ghép khéo léo giải pháp của DR. SMILE.
+- NẾU LÀ CHỦ ĐỀ CHIA SẺ KIẾN THỨC THUẦN TÚY (ví dụ: cách đánh răng, chăm sóc răng): Phải giải quyết triệt để nỗi đau/thắc mắc của khách hàng trước bằng chuyên môn sâu, sau đó mới lồng ghép khéo léo giải pháp của DR. SMILE. (TUYỆT ĐỐI KHÔNG đề cập đến giá cả ở dạng bài này).
+- NẾU LÀ CHỦ ĐỀ VỀ DỊCH VỤ / SO SÁNH DỊCH VỤ: BẮT BUỘC phải đề cập khéo léo đến GIÁ TỔNG QUAN và MỨC GIÁ THẤP NHẤT của dịch vụ đó tại DR. SMILE để thu hút khách hàng (Ví dụ: "Chỉ từ X triệu đồng").
 
 ⚠️ YÊU CẦU BẮT BUỘC (CRITICAL RULE):
 - BẠN CHỈ ĐƯỢC PHÉP TRẢ VỀ DUY NHẤT NỘI DUNG CỦA BÀI ĐĂNG FACEBOOK. 
@@ -90,7 +91,6 @@ Nhiệm vụ:
 - KHÔNG KẾT THÚC bằng các câu giải thích, nhận xét hay phân tích.
 - TUYỆT ĐỐI KHÔNG CHIA PHẦN BẰNG NHỮNG TỪ KHÔ KHAN (như "Tiêu đề:", "Thân bài:"). Trình bày ngắt dòng, liền mạch, tự nhiên như một bài post thực tế.
 - Khéo léo nhắc đến các gói dịch vụ/công nghệ của DR. SMILE liên quan đến TẤT CẢ các khía cạnh trong chủ đề.
-- TUYỆT ĐỐI KHÔNG ĐƯỢC ĐỀ CẬP ĐẾN GIÁ CẢ (KHÔNG báo giá, KHÔNG nói rẻ hay đắt, KHÔNG dùng từ "chi phí").
 - Phần cuối bài BẮT BUỘC phải có đầy đủ thông tin liên hệ: Hotline, Website và Địa chỉ (Address) của DR. SMILE.
 - Viết sẵn sàng để người dùng COPY & PASTE lên Facebook.
 - Có đầy đủ emoji và hashtag chuẩn SEO liên quan đến TẤT CẢ từ khóa trong '{topic}'.
@@ -120,8 +120,11 @@ Dưới đây là tài liệu hướng dẫn cực kỳ quan trọng về màu s
 Nhiệm vụ của bạn:
 Dựa trên bài đăng Facebook vừa được tạo về chủ đề '{topic}', hãy viết một PROMPT TIẾNG ANH duy nhất cho Leonardo.ai để tạo ảnh minh họa cho bài viết đó.
 
-YÊU CẦU ĐẶC BIỆT MỚI VỀ CẤU TRÚC ẢNH (Dựa trên thiết kế tham khảo):
-- BẠN HÃY TỰ DO SÁNG TẠO bố cục, góc chụp, biểu cảm nhân vật sao cho PHÙ HỢP NHẤT với nội dung của bài đăng Facebook chứ không gò bó. (Tuy nhiên nếu có nhân vật thì BẮT BUỘC phải là người Châu Á / Asian).
+LƯU Ý QUAN TRỌNG:
+- Lệnh ảnh phải BẮT BUỘC tuân thủ chặt chẽ tài liệu hướng dẫn (Màu sắc thương hiệu, cách dùng Text, phong cách thiết kế).
+- KHÔNG viết "Dưới đây là prompt...". CHỈ TRẢ VỀ DUY NHẤT NỘI DUNG PROMPT TIẾNG ANH.
+- CÓ CHỨA Text (Typography) liên quan đến chủ đề bài viết. NẾU trong bài viết Facebook có đề cập đến MỨC GIÁ (ví dụ "Chỉ từ X triệu"), BẮT BUỘC phải thêm yêu cầu chèn dòng Text giá đó vào hình ảnh một cách nổi bật (Ví dụ: "with glowing 3D text 'ONLY X TRIEU'").
+- Bạn hãy tự do sáng tạo bố cục, góc chụp, biểu cảm nhân vật sao cho PHÙ HỢP NHẤT với nội dung của bài đăng Facebook chứ không gò bó. (Tuy nhiên nếu có nhân vật thì BẮT BUỘC phải là người Châu Á / Asian).
 - TRÊN ẢNH PHẢI CÓ CHỮ (TEXT) BẰNG TIẾNG VIỆT CÓ DẤU. BẮT BUỘC bạn phải yêu cầu công cụ AI sinh ảnh tạo ra text Tiếng Việt CÓ DẤU chuẩn xác phù hợp với thông điệp. Ví dụ: `with typography "NỤ CƯỜI HOÀN MỸ"`, `featuring bold text "RĂNG ĐẸP TỰ TIN"`.
 - BẮT BUỘC PHẢI DÙNG LOGO GỐC: Trong câu lệnh prompt, bạn phải thêm hướng dẫn sử dụng hình ảnh Logo gốc của DR. SMILE và TUYỆT ĐỐI KHÔNG thêm ngoại cảnh (background/scenery) vào khu vực logo (Ví dụ: `Ensure to integrate the exact original DR. SMILE logo provided via Image Guidance, with strictly NO background or scenery added around the logo`).
 - BẮT BUỘC phải thiết kế một khu vực nhỏ (như infographic đơn giản, bảng hướng dẫn, các icon có viền) để mô tả tóm tắt QUY TRÌNH hoặc ƯU ĐIỂM của dịch vụ đó.
