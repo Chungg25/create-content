@@ -40,7 +40,8 @@ MODEL_NAME = "llama-3.3-70b-versatile"
 async def crawl_facebook_posts(topic):
     """Sử dụng crawl4ai để tìm kiếm qua Google"""
     search_query = f"site:facebook.com '{topic}' (viral OR hot OR xu hướng)"
-    google_search_url = f"https://www.google.com/search?q={search_query.replace(' ', '+')}"
+    # Thêm &num=5 để chỉ lấy 5 kết quả (5 bài viral nhất)
+    google_search_url = f"https://www.google.com/search?q={search_query.replace(' ', '+')}&num=5"
     
     async with AsyncWebCrawler(verbose=True) as crawler:
         result = await crawler.arun(url=google_search_url)
