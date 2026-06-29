@@ -81,7 +81,7 @@ Nhiệm vụ:
 
 🎯 CHIẾN LƯỢC NỘI DUNG TÙY THEO CHỦ ĐỀ:
 - Hãy xác định ý định của chủ đề (Topic Intent): Đây là bài So sánh? Giải đáp thắc mắc? Hay Giới thiệu dịch vụ?
-- NẾU LÀ CHỦ ĐỀ SO SÁNH (ví dụ: Veneer vs Bọc sứ): Bắt buộc phải đưa ra ưu/nhược điểm hoặc trường hợp áp dụng của CẢ 2 PHƯƠNG PHÁP một cách khách quan, chuyên sâu. Tuyệt đối không được bỏ sót vế nào hoặc thiên vị chỉ nhắc đến một dịch vụ.
+- NẾU LÀ CHỦ ĐỀ SO SÁNH / NHIỀU CHỦ THỂ (ví dụ: Veneer vs Bọc sứ): Không viết theo lối liệt kê ưu/nhược điểm khô khan. Thay vào đó, BẮT BUỘC phải phân tích rõ TỪNG PHƯƠNG PHÁP sẽ PHÙ HỢP VỚI ĐỐI TƯỢNG KHÁCH HÀNG NÀO / TÌNH TRẠNG RĂNG NÀO. Tuyệt đối không bỏ sót vế nào hay thiên vị chỉ nhắc đến một dịch vụ.
 - NẾU LÀ CHỦ ĐỀ CHIA SẺ KIẾN THỨC: Phải giải quyết triệt để nỗi đau/thắc mắc của khách hàng trước bằng chuyên môn sâu, sau đó mới lồng ghép khéo léo giải pháp của DR. SMILE.
 
 ⚠️ YÊU CẦU BẮT BUỘC (CRITICAL RULE):
@@ -105,7 +105,7 @@ Nhiệm vụ:
                 {"role": "user", "content": user_prompt}
             ],
             temperature=0.7,
-            max_tokens=2048
+            max_tokens=1024
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
@@ -139,7 +139,7 @@ YÊU CẦU ĐẶC BIỆT MỚI VỀ CẤU TRÚC ẢNH (Dựa trên thiết kế 
                 {"role": "user", "content": user_prompt}
             ],
             temperature=0.7,
-            max_tokens=1024
+            max_tokens=512
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
