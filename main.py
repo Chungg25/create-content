@@ -75,19 +75,24 @@ Thông tin phòng khám DR. SMILE:
 {brand_context}
 
 Nhiệm vụ:
-1. Đọc dữ liệu cào được từ các bài đăng viral về '{topic}'.
-2. Viết NGAY 1 BÀI ĐĂNG FACEBOOK HOÀN CHỈNH, cực kỳ hấp dẫn, bắt trend và lồng ghép khéo léo dịch vụ của DR. SMILE.
+1. Đọc dữ liệu tham khảo (nếu có) và phân tích cực kỳ cẩn thận chủ đề: '{topic}'.
+2. Viết NGAY 1 BÀI ĐĂNG FACEBOOK HOÀN CHỈNH, cực kỳ hấp dẫn, bắt trend và mang lại giá trị cao cho người đọc.
+
+🎯 CHIẾN LƯỢC NỘI DUNG TÙY THEO CHỦ ĐỀ:
+- Hãy xác định ý định của chủ đề (Topic Intent): Đây là bài So sánh? Giải đáp thắc mắc? Hay Giới thiệu dịch vụ?
+- NẾU LÀ CHỦ ĐỀ SO SÁNH (ví dụ: Veneer vs Bọc sứ): Bắt buộc phải đưa ra ưu/nhược điểm hoặc trường hợp áp dụng của CẢ 2 PHƯƠNG PHÁP một cách khách quan, chuyên sâu. Tuyệt đối không được bỏ sót vế nào hoặc thiên vị chỉ nhắc đến một dịch vụ.
+- NẾU LÀ CHỦ ĐỀ CHIA SẺ KIẾN THỨC: Phải giải quyết triệt để nỗi đau/thắc mắc của khách hàng trước bằng chuyên môn sâu, sau đó mới lồng ghép khéo léo giải pháp của DR. SMILE.
 
 ⚠️ YÊU CẦU BẮT BUỘC (CRITICAL RULE):
 - BẠN CHỈ ĐƯỢC PHÉP TRẢ VỀ DUY NHẤT NỘI DUNG CỦA BÀI ĐĂNG FACEBOOK. 
 - KHÔNG MỞ ĐẦU bằng các câu như "Dưới đây là...", "Bài viết của bạn đây...".
 - KHÔNG KẾT THÚC bằng các câu giải thích, nhận xét hay phân tích.
-- TUYỆT ĐỐI KHÔNG CHIA PHẦN (ví dụ không ghi "Tiêu đề:", "Thân bài:"). Viết liền mạch như một bài post thực tế.
-- BẮT BUỘC liệt kê một vài DỊCH VỤ CON hoặc gói dịch vụ cụ thể của DR. SMILE CÓ LIÊN QUAN TRỰC TIẾP đến chủ đề '{topic}'. (KHÔNG liệt kê lan man các dịch vụ không liên quan).
+- TUYỆT ĐỐI KHÔNG CHIA PHẦN BẰNG NHỮNG TỪ KHÔ KHAN (như "Tiêu đề:", "Thân bài:"). Trình bày ngắt dòng, liền mạch, tự nhiên như một bài post thực tế.
+- Khéo léo nhắc đến các gói dịch vụ/công nghệ của DR. SMILE liên quan đến TẤT CẢ các khía cạnh trong chủ đề.
 - TUYỆT ĐỐI KHÔNG ĐƯỢC ĐỀ CẬP ĐẾN GIÁ CẢ (KHÔNG báo giá, KHÔNG nói rẻ hay đắt, KHÔNG dùng từ "chi phí").
 - Phần cuối bài BẮT BUỘC phải có đầy đủ thông tin liên hệ: Hotline, Website và Địa chỉ (Address) của DR. SMILE.
 - Viết sẵn sàng để người dùng COPY & PASTE lên Facebook.
-- Có đầy đủ emoji và hashtag chuẩn SEO.
+- Có đầy đủ emoji và hashtag chuẩn SEO liên quan đến TẤT CẢ từ khóa trong '{topic}'.
 """
     user_prompt = f"Dữ liệu cào được:\n{scraped_data[:8000]}" 
 
