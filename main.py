@@ -129,7 +129,7 @@ CÁC YÊU CẦU KỸ THUẬT BẮT BUỘC:
 - Lệnh ảnh phải BẮT BUỘC tuân thủ chặt chẽ tài liệu hướng dẫn (Màu sắc thương hiệu, cách dùng Text, phong cách thiết kế).
 - KHÔNG viết "Dưới đây là prompt...". CHỈ TRẢ VỀ DUY NHẤT NỘI DUNG PROMPT TIẾNG ANH.
 - CÓ CHỨA Text (Typography) liên quan đến chủ đề bài viết. NẾU trong bài viết Facebook có đề cập đến MỨC GIÁ, BẮT BUỘC phải thêm yêu cầu chèn dòng Text giá đó vào hình ảnh một cách nổi bật (Ví dụ: "with glowing 3D text 'CHỈ TỪ X TRIỆU'").
-- Bạn hãy tự do sáng tạo bố cục, góc chụp, biểu cảm nhân vật sao cho PHÙ HỢP NHẤT với bài đăng. (Nếu có nhân vật thì BẮT BUỘC phải là người Châu Á / Asian).
+- ĐA DẠNG HÓA NHÂN VẬT (CHARACTER DIVERSITY): Để tránh sự nhàm chán, nếu có nhân vật thì BẮT BUỘC mỗi prompt phải miêu tả một KIỂU NHÂN VẬT HOÀN TOÀN KHÁC NHAU tùy theo ngữ cảnh (ví dụ: nam doanh nhân 45 tuổi, nữ sinh viên 20 tuổi, người phụ nữ trung niên 50 tuổi thanh lịch, hoặc nam thanh niên năng động 30 tuổi). KHÔNG được dùng mãi một kiểu nhân vật mặc định (nữ trẻ đẹp). Tuy nhiên, BẮT BUỘC vẫn phải là người Châu Á (Asian).
 - TRÊN ẢNH PHẢI CÓ CHỮ (TEXT) BẰNG TIẾNG VIỆT CÓ DẤU. Ví dụ: `with typography "NỤ CƯỜI HOÀN MỸ"`, `featuring bold text "RĂNG ĐẸP TỰ TIN"`.
 - BẮT BUỘC PHẢI DÙNG LOGO GỐC: Thêm hướng dẫn sử dụng Logo gốc của DR. SMILE, TUYỆT ĐỐI KHÔNG thêm ngoại cảnh (background/scenery) vào khu vực logo.
 - BẮT BUỘC thiết kế một khu vực nhỏ (infographic/icon) để mô tả tóm tắt QUY TRÌNH hoặc ƯU ĐIỂM của dịch vụ đó.
