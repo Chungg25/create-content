@@ -120,17 +120,22 @@ Dưới đây là tài liệu hướng dẫn cực kỳ quan trọng về màu s
 Nhiệm vụ của bạn:
 Dựa trên bài đăng Facebook vừa được tạo về chủ đề '{topic}', hãy viết một PROMPT TIẾNG ANH duy nhất cho Leonardo.ai để tạo ảnh minh họa cho bài viết đó.
 
-LƯU Ý QUAN TRỌNG:
+LƯU Ý QUAN TRỌNG VỀ TỐI ƯU HÓA CHUYỂN ĐỔI (CTR & EMOTIONS):
+- TRUYỀN TẢI CẢM XÚC (EMOTION): Ảnh sinh ra BẮT BUỘC phải khơi gợi cảm xúc mạnh mẽ để kích thích người xem click (Click-Through-Rate cao). Tùy nội dung, hãy chèn thêm các từ khóa biểu cảm: ví dụ từ nỗi đau (đau răng, tự ti) chuyển hóa thành sự hạnh phúc, an tâm, nụ cười rạng rỡ (joyful, radiant, confident smile, empathetic, reassuring, warm).
+- SỰ LIÊN KẾT NỘI DUNG (CONTENT ALIGNMENT): Bối cảnh và hành động của nhân vật trong ảnh BẮT BUỘC phải ăn khớp 100% với ý chính của bài viết Facebook.
+- BACKTEST VĂN PHONG (TYPOGRAPHY): Bạn phải suy nghĩ và "backtest" (kiểm tra lại) xem dòng chữ Tiếng Việt (Typography) dự định in trên ảnh có thực sự "giật tít", tự nhiên và đúng chuẩn văn phong người Việt hay không trước khi đưa vào prompt.
+
+CÁC YÊU CẦU KỸ THUẬT BẮT BUỘC:
 - Lệnh ảnh phải BẮT BUỘC tuân thủ chặt chẽ tài liệu hướng dẫn (Màu sắc thương hiệu, cách dùng Text, phong cách thiết kế).
 - KHÔNG viết "Dưới đây là prompt...". CHỈ TRẢ VỀ DUY NHẤT NỘI DUNG PROMPT TIẾNG ANH.
-- CÓ CHỨA Text (Typography) liên quan đến chủ đề bài viết. NẾU trong bài viết Facebook có đề cập đến MỨC GIÁ (ví dụ "Chỉ từ X triệu"), BẮT BUỘC phải thêm yêu cầu chèn dòng Text giá đó vào hình ảnh một cách nổi bật (Ví dụ: "with glowing 3D text 'ONLY X TRIEU'").
-- Bạn hãy tự do sáng tạo bố cục, góc chụp, biểu cảm nhân vật sao cho PHÙ HỢP NHẤT với nội dung của bài đăng Facebook chứ không gò bó. (Tuy nhiên nếu có nhân vật thì BẮT BUỘC phải là người Châu Á / Asian).
-- TRÊN ẢNH PHẢI CÓ CHỮ (TEXT) BẰNG TIẾNG VIỆT CÓ DẤU. BẮT BUỘC bạn phải yêu cầu công cụ AI sinh ảnh tạo ra text Tiếng Việt CÓ DẤU chuẩn xác phù hợp với thông điệp. Ví dụ: `with typography "NỤ CƯỜI HOÀN MỸ"`, `featuring bold text "RĂNG ĐẸP TỰ TIN"`.
-- BẮT BUỘC PHẢI DÙNG LOGO GỐC: Trong câu lệnh prompt, bạn phải thêm hướng dẫn sử dụng hình ảnh Logo gốc của DR. SMILE và TUYỆT ĐỐI KHÔNG thêm ngoại cảnh (background/scenery) vào khu vực logo (Ví dụ: `Ensure to integrate the exact original DR. SMILE logo provided via Image Guidance, with strictly NO background or scenery added around the logo`).
-- BẮT BUỘC phải thiết kế một khu vực nhỏ (như infographic đơn giản, bảng hướng dẫn, các icon có viền) để mô tả tóm tắt QUY TRÌNH hoặc ƯU ĐIỂM của dịch vụ đó.
-- Đảm bảo tuân thủ TUYỆT ĐỐI các quy tắc về màu sắc (Xanh, Trắng) từ tài liệu hướng dẫn.
+- CÓ CHỨA Text (Typography) liên quan đến chủ đề bài viết. NẾU trong bài viết Facebook có đề cập đến MỨC GIÁ, BẮT BUỘC phải thêm yêu cầu chèn dòng Text giá đó vào hình ảnh một cách nổi bật (Ví dụ: "with glowing 3D text 'CHỈ TỪ X TRIỆU'").
+- Bạn hãy tự do sáng tạo bố cục, góc chụp, biểu cảm nhân vật sao cho PHÙ HỢP NHẤT với bài đăng. (Nếu có nhân vật thì BẮT BUỘC phải là người Châu Á / Asian).
+- TRÊN ẢNH PHẢI CÓ CHỮ (TEXT) BẰNG TIẾNG VIỆT CÓ DẤU. Ví dụ: `with typography "NỤ CƯỜI HOÀN MỸ"`, `featuring bold text "RĂNG ĐẸP TỰ TIN"`.
+- BẮT BUỘC PHẢI DÙNG LOGO GỐC: Thêm hướng dẫn sử dụng Logo gốc của DR. SMILE, TUYỆT ĐỐI KHÔNG thêm ngoại cảnh (background/scenery) vào khu vực logo.
+- BẮT BUỘC thiết kế một khu vực nhỏ (infographic/icon) để mô tả tóm tắt QUY TRÌNH hoặc ƯU ĐIỂM của dịch vụ đó.
+- Tuân thủ TUYỆT ĐỐI quy tắc màu sắc (Xanh, Trắng).
 - BẠN CHỈ ĐƯỢC TRẢ VỀ CÂU LỆNH PROMPT BẰNG TIẾNG ANH, không có tiêu đề, không giải thích gì thêm.
-- Bắt buộc phải có Hotline và câu "Liên hệ ngay để nhận tư vấn miễn phí"
+- Bắt buộc phải có Hotline và text "Liên hệ ngay để nhận tư vấn miễn phí" trên ảnh.
 """
     user_prompt = f"Bài đăng Facebook:\n{fb_post}"
 
